@@ -1,6 +1,6 @@
 # Project Bootstrap for Claude Code
 
-**Version:** 1.3
+**Version:** 1.4
 **Updated:** 2026-04-19
 **Canonical:** this file
 **Translations:** [Русский](./project-bootstrap.ru.md)
@@ -20,6 +20,21 @@
 - **Version via git tags** — `v1.0`, `v1.1`, so you can reference an exact version
 - **Do NOT copy this file into a project's `docs/`** — instead, record its use in `docs/decisions.md` with a link to the version
 - **Evolve it** — add what works in practice, remove what doesn't
+
+### Access patterns
+
+Three ways to use the template from a project. Pick one:
+
+1. **External reference (default).** Template lives in a separate repo. `docs/decisions.md` records the version used at bootstrap. No template files inside the project. Simplest, recommended for most cases.
+
+2. **Git submodule.** Include the template as a submodule, e.g. at `.claude/templates/`. Useful if you want to pin an exact commit and update deliberately. Trade-off: adds submodule mechanics to everyday git operations.
+   ```
+   git submodule add <template-repo-url> .claude/templates
+   ```
+
+3. **Snapshot in docs/meta/.** Copy the template file into `docs/meta/bootstrap-snapshot.md` at bootstrap time. Use this only in airgapped environments without access to the external repo. Add `docs/meta/` to `.claudeignore`.
+
+Default to (1). Move to (2) or (3) only when there's a concrete reason.
 
 ---
 
@@ -92,6 +107,18 @@ Multiple components, different runtimes, interaction protocols.
 Examples: firmware + software + web UI, microservices, embedded projects.
 
 **Structure:** base + `docs/protocols/` + `reference/` + top-level component split (`firmware/`, `software/`, etc.).
+
+### How to choose the type
+
+Use these criteria in order. First match wins:
+
+| Criterion | Type |
+|---|---|
+| 2+ top-level components or 2+ runtime domains (e.g. firmware + desktop app) | Extended |
+| One primary deployable component with tests/lint/docs | Standard |
+| One runtime, no deployable split, single artifact | Minimal |
+
+If in doubt between two levels, pick the simpler one. The template is explicitly designed to extend on demand — starting smaller is cheaper than starting larger.
 
 ---
 
@@ -180,7 +207,25 @@ The `claude-templates` repository itself (where this file lives) applies the tem
 - For Extended: which components (firmware/software/tools), whether protocols/reference are needed
 - Any specifics not covered by the template
 
-If something wasn't discussed — ask, don't invent.
+If a **critical** parameter wasn't discussed — ask. Critical parameters: project name, type (Minimal/Standard/Extended), primary language, main runtime components.
+
+For non-critical parameters — apply safe defaults (see below) and explicitly list them in the final bootstrap output so the user can correct them.
+
+### Safe defaults
+
+When a parameter wasn't discussed, use these defaults instead of inventing values:
+
+| Parameter | Safe default |
+|---|---|
+| Lint command | Omit from `CLAUDE.md`. Do not invent. |
+| Test command | Write `Tests: not configured yet` in `CLAUDE.md`. |
+| Run command | If unknown, write `Run: see README.md` and leave README minimal. |
+| Project type (when ambiguous) | Pick the simpler option (Minimal over Standard, Standard over Extended). |
+| `.claude/settings.json` `allow` list | Include only safe git-read operations (`git status`, `git diff`, `git log`). Do not add placeholder bash patterns for tools whose commands were not discussed. |
+| Naming of top-level folders | Lowercase kebab-case. Avoid generic names like `misc`, `stuff`, `temp`, `utils` at top level. |
+| Framework-specific configs (Docker, CI, pre-commit) | Do not add unless explicitly requested. |
+
+At the end of bootstrap, print a "Defaults applied" summary listing every field where a default was used instead of a discussed value.
 
 ---
 
@@ -198,6 +243,8 @@ If something wasn't discussed — ask, don't invent.
 - Do not add extra commands to `.claude/commands/`
 - Do not create placeholder files in `docs/standards/`
 - Do not translate code or technical comments into Russian
+- Do not generate placeholder `Bash(...)` allow-entries in `.claude/settings.json` for commands that weren't discussed
+- Do not invent lint/test/run commands — omit them or mark as not configured
 
 ---
 
@@ -237,6 +284,8 @@ If something wasn't discussed — ask, don't invent.
 ```
 
 **Note:** CLAUDE.md itself is written in English, but the language-rule section makes the policy explicit for the AI.
+
+**Size budget:** target 40–80 lines. Hard ceiling 120 lines. If content grows past the ceiling — move detail into `docs/` (architecture, standards) and keep CLAUDE.md as an index with links.
 
 ---
 
@@ -406,7 +455,7 @@ docs/meta/
 }
 ```
 
-Adapt `allow` to the project's stack.
+Adapt `allow` to the **actual commands the project uses**. If test/lint/run commands weren't discussed during bootstrap, leave only the safe git-read entries shown above. Do not add placeholder patterns like `Bash(<test command>:*)` — the AI will treat them as real commands later.
 
 ---
 
@@ -444,8 +493,9 @@ Written in Russian because this is an AI-chat instruction, not source code or do
    - `test:` тесты
    - `docs:` документация
    - `chore:` рутина (зависимости, конфиги)
-3. Покажи сообщение ПЕРЕД коммитом
-4. После моего подтверждения — `git commit`
+3. Если изменения содержат архитектурное решение (выбор библиотеки, смена подхода, новый протокол, отказ от подхода) — спроси: "записать это решение в docs/decisions.md?". Не блокируй коммит.
+4. Покажи сообщение ПЕРЕД коммитом
+5. После моего подтверждения — `git commit`
 ```
 
 ---
@@ -500,6 +550,9 @@ A folder for **development standards actually applied in work**.
 - Bootstrap templates or snapshots (those go to `docs/meta/` if needed)
 - External documentation (datasheets, vendor docs — those go to `reference/`)
 - Architecture decisions (those go to `docs/decisions.md`)
+
+**Status of the folder itself:**
+The folder is created empty at bootstrap as a reserved location — its existence signals "standards live here if any emerge". An empty folder is fine. Empty **files** are not.
 
 **Filling principle:**
 Don't create empty files. Create a file when:
@@ -569,7 +622,7 @@ if [[ -e "$PROJECT_NAME" ]]; then
   exit 1
 fi
 
-BOOTSTRAP_VERSION="1.2"
+BOOTSTRAP_VERSION="1.4"
 BOOTSTRAP_DATE="$(date +%Y-%m-%d)"
 
 mkdir -p "$PROJECT_NAME"/{docs/standards,.claude/commands}
@@ -600,6 +653,39 @@ Add **only on demand** and only after discussion:
 | Specific protocols/interfaces | `docs/protocols/` |
 | Standard → Extended transition | `firmware/` / `software/` / `tools/` |
 | Airgapped environment | Snapshot in `docs/meta/bootstrap-snapshot.md` |
+
+---
+
+## 🚫 Anti-patterns in daily use
+
+Bootstrap sets up the structure correctly. These are the ways projects drift from it over time. Catch them in review.
+
+### Duplicating docs/ content into CLAUDE.md
+CLAUDE.md is an entry point, not a mirror. If something belongs in `docs/architecture.md` or `docs/standards/`, link to it — don't inline it. The moment CLAUDE.md grows past its size budget, it has lost its job.
+
+### Creating standards files "for the future"
+`docs/standards/git-workflow.md` with a TODO inside is worse than no file. Empty standards files lie about what's actually enforced. Create the file the day the rule starts being applied — not earlier.
+
+### Mixing languages inside a single artifact
+Russian comments in English code. English labels on a Russian chat note. The language rule is per-artifact, not per-line. If you catch yourself switching mid-file, the file is in the wrong bucket.
+
+### Storing large data without updating .claudeignore
+Logs, datasets, vendor PDFs, build artifacts — any of these can silently inflate the AI's context budget. When adding a new directory that will grow, update `.claudeignore` in the same commit.
+
+### Letting decisions.md fall behind
+If a non-trivial architectural choice was made in chat and not recorded, it will be re-litigated in two weeks. Either record the decision or explicitly decide it wasn't worth recording — don't leave the log silently stale.
+
+### Treating CLAUDE.md as permanent
+Conventions change. Stack changes. CLAUDE.md that still describes the stack from month one after six months of evolution misleads the AI more than no CLAUDE.md at all. Update it when reality diverges.
+
+### Adding commands to .claude/commands/ for one-off tasks
+A command is a workflow you run repeatedly. A single "help me refactor this module" chat is not a command. Extract to a command only when the third repetition is coming.
+
+### Committing AI-drafts into docs/
+Intermediate AI output, chat exports, exploratory notes — none of this belongs in `docs/`. If it must be kept at all, put it in `docs/meta/` (which is in `.claudeignore`) or leave it out of the repo. `docs/` holds the final, authoritative state of the project.
+
+### Nested CLAUDE.md without a real reason
+Sub-directory `CLAUDE.md` files are for **actual differences in rules** — e.g. `firmware/` using C++ conventions while `software/` uses Python. Don't add nested CLAUDE.md for symmetry or because "every folder should have one". Top-level CLAUDE.md covers the whole project unless conventions genuinely diverge.
 
 ---
 

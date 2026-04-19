@@ -7,6 +7,25 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4] — 2026-04-19
+
+### Added
+- Anti-patterns section covering common drift modes in daily use
+- Three documented access patterns (external / submodule / snapshot) in "How to store and version this template"
+- Explicit criteria for choosing Minimal / Standard / Extended project type
+- Safe defaults table for parameters not discussed during bootstrap
+- Size budget for CLAUDE.md (target 40–80 lines, ceiling 120)
+- Reminder in commit.md to record architectural decisions in docs/decisions.md
+
+### Changed
+- Tightened guidance on `.claude/settings.json`: no placeholder `Bash(...)` entries
+- Clarified status of empty `docs/standards/` folder vs. empty files inside it
+
+### Fixed
+- Outdated `BOOTSTRAP_VERSION="1.2"` in the bash-script skeleton
+
+---
+
 ## [1.3] — 2026-04-19
 
 ### Added
