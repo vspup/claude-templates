@@ -7,6 +7,16 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.6] — 2026-04-19
+
+### Added
+- **Assumptions block** — before generating the bootstrap script, the AI must output a structured summary of everything it understood from the discussion and wait for explicit user confirmation. If the user corrects any field — the AI updates the block and asks again before proceeding.
+
+### Why
+The AI silently making assumptions was the main source of wrong bootstraps — wrong type, invented commands, misunderstood component split. Making assumptions explicit and requiring confirmation before any generation closes this gap. The block also surfaces which fields used safe defaults, so the user can catch them without reading the full output.
+
+---
+
 ## [1.5] — 2026-04-19
 
 ### Changed

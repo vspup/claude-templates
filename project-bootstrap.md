@@ -1,6 +1,6 @@
 # Project Bootstrap for Claude Code
 
-**Version:** 1.5
+**Version:** 1.6
 **Updated:** 2026-04-19
 **Canonical:** this file
 **Translations:** [Русский](./project-bootstrap.ru.md)
@@ -192,6 +192,30 @@ The `claude-templates` repository itself (where this file lives) applies the tem
 If a **critical** parameter wasn't discussed — ask. Critical parameters: project name, type (Single/Multi-Component), primary language, main runtime components.
 
 For non-critical parameters — apply safe defaults (see below) and explicitly list them in the final bootstrap output so the user can correct them.
+
+### Assumptions block
+
+Before generating the script, the AI must output an **Assumptions** block and wait for explicit confirmation.
+
+Format:
+
+```
+Assumptions:
+- Project name: <name>
+- Type: Single / Multi-Component
+- Language: <language> <version>
+- Framework / key libraries: <list or "none">
+- Run: <command or "see README.md">
+- Tests: <command or "not configured yet">
+- Lint: <command or "omitted">
+- Components (Multi-Component only): <list>
+- Defaults applied: <list every field where a safe default was used, or "none">
+
+Proceed with bootstrap?
+```
+
+The user must confirm (or correct) before the AI generates anything.
+If the user corrects a field — update the block and ask again before proceeding.
 
 ### Safe defaults
 
