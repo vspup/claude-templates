@@ -7,6 +7,18 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4] — 2026-04-19
+
+### Added
+- **Anti-patterns section** covering common drift modes in daily use: CLAUDE.md bloat, premature standards files, language mixing, missing .claudeignore updates, stale decisions.md, permanent CLAUDE.md, one-off commands
+- **Three access patterns** for using the template from a project (external reference, git submodule, snapshot) — documented under "How to store and version this template"
+- **decisions.md reminder in commit.md template** — step 3 asks to record architectural decisions without blocking the commit
+
+### Why
+Working with the template daily revealed patterns that degrade the structure over time but are invisible at bootstrap. Anti-patterns belong in the spec because they're exactly what code review should catch — and reviewers need a canonical list to point to. The access patterns section fills a gap: the template said "keep it outside your projects" but didn't explain what "outside" looks like in practice. The decisions.md reminder closes the loop between making a decision in chat and recording it — the most common way the decisions log silently falls behind.
+
+---
+
 ## [1.3] — 2026-04-19
 
 ### Added

@@ -1,6 +1,6 @@
 # Project Bootstrap for Claude Code
 
-**Version:** 1.3
+**Version:** 1.4
 **Updated:** 2026-04-19
 **Canonical:** this file
 **Translations:** [Русский](./project-bootstrap.ru.md)
@@ -20,6 +20,21 @@
 - **Version via git tags** — `v1.0`, `v1.1`, so you can reference an exact version
 - **Do NOT copy this file into a project's `docs/`** — instead, record its use in `docs/decisions.md` with a link to the version
 - **Evolve it** — add what works in practice, remove what doesn't
+
+### Access patterns
+
+Three ways to use the template from a project. Pick one:
+
+1. **External reference (default).** Template lives in a separate repo. `docs/decisions.md` records the version used at bootstrap. No template files inside the project. Simplest, recommended for most cases.
+
+2. **Git submodule.** Include the template as a submodule, e.g. at `.claude/templates/`. Useful if you want to pin an exact commit and update deliberately. Trade-off: adds submodule mechanics to everyday git operations.
+   ```
+   git submodule add <template-repo-url> .claude/templates
+   ```
+
+3. **Snapshot in docs/meta/.** Copy the template file into `docs/meta/bootstrap-snapshot.md` at bootstrap time. Use this only in airgapped environments without access to the external repo. Add `docs/meta/` to `.claudeignore`.
+
+Default to (1). Move to (2) or (3) only when there's a concrete reason.
 
 ---
 
@@ -444,8 +459,9 @@ Written in Russian because this is an AI-chat instruction, not source code or do
    - `test:` тесты
    - `docs:` документация
    - `chore:` рутина (зависимости, конфиги)
-3. Покажи сообщение ПЕРЕД коммитом
-4. После моего подтверждения — `git commit`
+3. Если изменения содержат архитектурное решение (выбор библиотеки, смена подхода, новый протокол, отказ от подхода) — напомни, что это стоит записать в `docs/decisions.md`. Не блокируй коммит, просто спроси: "записать это решение в decisions.md?"
+4. Покажи сообщение ПЕРЕД коммитом
+5. После моего подтверждения — `git commit`
 ```
 
 ---
@@ -600,6 +616,33 @@ Add **only on demand** and only after discussion:
 | Specific protocols/interfaces | `docs/protocols/` |
 | Standard → Extended transition | `firmware/` / `software/` / `tools/` |
 | Airgapped environment | Snapshot in `docs/meta/bootstrap-snapshot.md` |
+
+---
+
+## 🚫 Anti-patterns in daily use
+
+Bootstrap sets up the structure correctly. These are the ways projects drift from it over time. Catch them in review.
+
+### Duplicating docs/ content into CLAUDE.md
+CLAUDE.md is an entry point, not a mirror. If something belongs in `docs/architecture.md` or `docs/standards/`, link to it — don't inline it. The moment CLAUDE.md grows past one screen, it has lost its job.
+
+### Creating standards files "for the future"
+`docs/standards/git-workflow.md` with a TODO inside is worse than no file. Empty standards files lie about what's actually enforced. Create the file the day the rule starts being applied — not earlier.
+
+### Mixing languages inside a single artifact
+Russian comments in English code. English labels on a Russian chat note. The language rule is per-artifact, not per-line. If you catch yourself switching mid-file, the file is in the wrong bucket.
+
+### Storing large data without updating .claudeignore
+Logs, datasets, vendor PDFs, build artifacts — any of these can silently inflate the AI's context budget. When adding a new directory that will grow, update `.claudeignore` in the same commit.
+
+### Letting decisions.md fall behind
+If a non-trivial architectural choice was made in chat and not recorded, it will be re-litigated in two weeks. Either record the decision or explicitly decide it wasn't worth recording — don't leave the log silently stale.
+
+### Treating CLAUDE.md as permanent
+Conventions change. Stack changes. CLAUDE.md that still describes the stack from month one after six months of evolution misleads the AI more than no CLAUDE.md at all. Update it when reality diverges.
+
+### Adding commands to .claude/commands/ for one-off tasks
+A command is a workflow you run repeatedly. A single "help me refactor this module" chat is not a command. Extract to a command only when the third repetition is coming.
 
 ---
 
