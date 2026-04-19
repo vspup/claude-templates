@@ -2,6 +2,7 @@
 
 Личная коллекция шаблонов и воркфлоу для работы с [Claude Code](https://docs.claude.com/en/docs/claude-code/overview).
 
+**Репозиторий:** https://github.com/vspup/claude-templates
 **Languages:** [English](./README.md) | Русский
 
 ---
@@ -38,7 +39,7 @@
 
 2. **Git submodule.** Подключи шаблон как submodule, например в `.claude/templates/`. Полезно если хочешь зафиксировать конкретный коммит и обновляться осознанно. Компромисс: добавляет механику submodule в ежедневные git-операции.
    ```
-   git submodule add <template-repo-url> .claude/templates
+   git submodule add https://github.com/vspup/claude-templates.git .claude/templates
    ```
 
 3. **Снапшот в docs/meta/.** Скопируй файл шаблона в `docs/meta/bootstrap-snapshot.md` в момент bootstrap. Используй только в airgapped-средах без доступа к внешнему репозиторию. Добавь `docs/meta/` в `.claudeignore`.
@@ -67,7 +68,7 @@ Semantic Versioning через git-теги: `v1.0`, `v1.1`, `v1.2`, ...
 **При ссылке на шаблон из проекта** используй URL с тегом:
 
 ```
-https://github.com/<you>/claude-templates/blob/v1.2/project-bootstrap.md
+https://github.com/vspup/claude-templates/blob/v1.4/project-bootstrap.md
 ```
 
 Тогда `docs/decisions.md` проекта будет всегда указывать на стабильный снапшот, даже если шаблон потом эволюционирует.

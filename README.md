@@ -2,6 +2,7 @@
 
 Personal collection of templates and workflows for working with [Claude Code](https://docs.claude.com/en/docs/claude-code/overview).
 
+**Repository:** https://github.com/vspup/claude-templates
 **Translations:** [Русский](./README.ru.md)
 
 ---
@@ -38,7 +39,7 @@ Three ways to use the template from a project. Pick one:
 
 2. **Git submodule.** Include the template as a submodule, e.g. at `.claude/templates/`. Useful if you want to pin an exact commit and update deliberately. Trade-off: adds submodule mechanics to everyday git operations.
    ```
-   git submodule add <template-repo-url> .claude/templates
+   git submodule add https://github.com/vspup/claude-templates.git .claude/templates
    ```
 
 3. **Snapshot in docs/meta/.** Copy the template file into `docs/meta/bootstrap-snapshot.md` at bootstrap time. Use this only in airgapped environments without access to the external repo. Add `docs/meta/` to `.claudeignore`.
@@ -67,7 +68,7 @@ Semantic versioning via git tags: `v1.0`, `v1.1`, `v1.2`, ...
 **When referencing a template from a project**, use a tagged URL:
 
 ```
-https://github.com/<you>/claude-templates/blob/v1.2/project-bootstrap.md
+https://github.com/vspup/claude-templates/blob/v1.4/project-bootstrap.md
 ```
 
 This way your project's `docs/decisions.md` will always point to a stable snapshot, even if the template evolves later.
