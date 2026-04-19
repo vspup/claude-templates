@@ -6,38 +6,6 @@
 **Translations:** [Русский](./project-bootstrap.ru.md)
 **Purpose:** Specification for bootstrapping a new project with Claude Code support.
 
-## How to use
-
-1. Discuss the project idea with the AI, choose the stack, do initial analysis
-2. At the end of the discussion, attach this file and ask:
-   > "Generate a bash bootstrap script for the project based on this spec, taking our discussion into account."
-3. Run the produced `bootstrap.sh`
-4. `cd <project> && claude` — start working
-
-## How to store and version this template
-
-- **Keep the template outside your projects** — in a personal repository (e.g. `<you>/claude-templates` or `<you>/dotfiles`)
-- **Version via git tags** — `v1.0`, `v1.1`, so you can reference an exact version
-- **Do NOT copy this file into a project's `docs/`** — instead, record its use in `docs/decisions.md` with a link to the version
-- **Evolve it** — add what works in practice, remove what doesn't
-
-### Access patterns
-
-Three ways to use the template from a project. Pick one:
-
-1. **External reference (default).** Template lives in a separate repo. `docs/decisions.md` records the version used at bootstrap. No template files inside the project. Simplest, recommended for most cases.
-
-2. **Git submodule.** Include the template as a submodule, e.g. at `.claude/templates/`. Useful if you want to pin an exact commit and update deliberately. Trade-off: adds submodule mechanics to everyday git operations.
-   ```
-   git submodule add <template-repo-url> .claude/templates
-   ```
-
-3. **Snapshot in docs/meta/.** Copy the template file into `docs/meta/bootstrap-snapshot.md` at bootstrap time. Use this only in airgapped environments without access to the external repo. Add `docs/meta/` to `.claudeignore`.
-
-Default to (1). Move to (2) or (3) only when there's a concrete reason.
-
----
-
 ## 🎯 Principles
 
 1. **CLAUDE.md is the AI entry point** — concise (one screen max)
