@@ -7,6 +7,20 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.5] — 2026-04-19
+
+### Changed
+- **Project type system simplified: Minimal / Standard / Extended → Single / Multi-Component**
+  - Single: one runtime, one process
+  - Multi-Component: multiple runtimes or independent components
+  - Decision rule: "Can this project run as a single process?" Yes → Single, No → Multi-Component
+  - All references updated throughout the template (structure section names, checklists, safe defaults, bash requirements, when-to-extend table)
+
+### Why
+Three levels (Minimal/Standard/Extended) created a grey zone — Standard was ambiguous and teams debated which level to pick. The real distinction is architectural: one runtime vs. multiple runtimes. Two levels with a single yes/no question removes the ambiguity entirely. The "if unsure — pick simpler" rule is preserved.
+
+---
+
 ## [1.4] — 2026-04-19
 
 ### Added

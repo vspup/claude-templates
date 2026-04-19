@@ -1,6 +1,6 @@
 # Project Bootstrap for Claude Code
 
-**Version:** 1.4
+**Version:** 1.5
 **Updated:** 2026-04-19
 **Canonical:** this file
 **Translations:** [Русский](./project-bootstrap.ru.md)
@@ -56,37 +56,51 @@ Code, docs, comments, commits, interfaces, API, JSON: English
 
 ## 📋 Project types
 
-Pick the type at start — it determines the initial structure.
+Choose project type based on execution model.
 
-### 🟢 Minimal
-One technology, one runtime, simple task.
-Examples: CLI utility, small script, single-page site, simple library.
+---
+
+### 🟢 Single
+
+Single runtime, single process.
+
+Examples:
+- CLI tool
+- API service
+- desktop app
 
 **Structure:** base (see below).
 
-### 🟡 Standard
-Web service, API, ML project, desktop app — one primary stack, clear architecture.
-Examples: FastAPI service, React app, CLI with plugins, ETL pipeline.
+---
 
-**Structure:** base + `docs/architecture.md` if needed.
+### 🔴 Multi-Component
 
-### 🔴 Extended
-Multiple components, different runtimes, interaction protocols.
-Examples: firmware + software + web UI, microservices, embedded projects.
+Multiple runtimes or independent components.
+
+Examples:
+- firmware + desktop app
+- backend + frontend
+- microservices
 
 **Structure:** base + `docs/protocols/` + `reference/` + top-level component split (`firmware/`, `software/`, etc.).
 
-### How to choose the type
+---
 
-Use these criteria in order. First match wins:
+### How to choose
 
-| Criterion | Type |
-|---|---|
-| 2+ top-level components or 2+ runtime domains (e.g. firmware + desktop app) | Extended |
-| One primary deployable component with tests/lint/docs | Standard |
-| One runtime, no deployable split, single artifact | Minimal |
+Ask one question:
 
-If in doubt between two levels, pick the simpler one. The template is explicitly designed to extend on demand — starting smaller is cheaper than starting larger.
+> "Can this project run as a single process?"
+
+- Yes → Single
+- No → Multi-Component
+
+---
+
+### Rule
+
+If unsure — choose Single.
+Upgrade to Multi-Component only when needed.
 
 ---
 
@@ -117,7 +131,7 @@ The `claude-templates` repository itself (where this file lives) applies the tem
 
 ---
 
-## 📁 Base structure (Minimal / Standard)
+## 📁 Single structure
 
 ```
 <project>/
@@ -136,7 +150,7 @@ The `claude-templates` repository itself (where this file lives) applies the tem
 └── <source directory for the stack>
 ```
 
-## 📁 Extended structure (only when explicitly needed)
+## 📁 Multi-Component structure (only when explicitly needed)
 
 ```
 <project>/
@@ -159,23 +173,23 @@ The `claude-templates` repository itself (where this file lives) applies the tem
 └── tools/                  ← utilities, converters, automation
 ```
 
-**Note:** `docs/standards/` starts empty. It is filled as real rules emerge. In the Extended structure we also don't create stub directories — only real ones.
+**Note:** `docs/standards/` starts empty. It is filled as real rules emerge. In the Multi-Component structure we also don't create stub directories — only real ones.
 
 ---
 
 ## ✅ Before generation, the AI must confirm
 
 - Project name (folder name)
-- **Project type:** Minimal / Standard / Extended
+- **Project type:** Single / Multi-Component
 - Short description (1–2 sentences)
 - Main language and version
 - Key libraries / framework
 - Commands: run / tests / lint
 - Bootstrap template version (for the `decisions.md` entry)
-- For Extended: which components (firmware/software/tools), whether protocols/reference are needed
+- For Multi-Component: which components (firmware/software/tools), whether protocols/reference are needed
 - Any specifics not covered by the template
 
-If a **critical** parameter wasn't discussed — ask. Critical parameters: project name, type (Minimal/Standard/Extended), primary language, main runtime components.
+If a **critical** parameter wasn't discussed — ask. Critical parameters: project name, type (Single/Multi-Component), primary language, main runtime components.
 
 For non-critical parameters — apply safe defaults (see below) and explicitly list them in the final bootstrap output so the user can correct them.
 
@@ -188,7 +202,7 @@ When a parameter wasn't discussed, use these defaults instead of inventing value
 | Lint command | Omit from `CLAUDE.md`. Do not invent. |
 | Test command | Write `Tests: not configured yet` in `CLAUDE.md`. |
 | Run command | If unknown, write `Run: see README.md` and leave README minimal. |
-| Project type (when ambiguous) | Pick the simpler option (Minimal over Standard, Standard over Extended). |
+| Project type (when ambiguous) | Pick Single. |
 | `.claude/settings.json` `allow` list | Include only safe git-read operations (`git status`, `git diff`, `git log`). Do not add placeholder bash patterns for tools whose commands were not discussed. |
 | Naming of top-level folders | Lowercase kebab-case. Avoid generic names like `misc`, `stuff`, `temp`, `utils` at top level. |
 | Framework-specific configs (Docker, CI, pre-commit) | Do not add unless explicitly requested. |
@@ -202,7 +216,7 @@ At the end of bootstrap, print a "Defaults applied" summary listing every field 
 - Do not copy this file into the project
 - Do not create empty "future" directories (except `docs/standards/` as a placeholder for future standards)
 - Do not create stubs like `TECH_SPEC.md` or `ARCHITECTURE.md` if not discussed
-- Do not add `firmware/`, `software/`, `tools/` without explicit Extended type confirmation
+- Do not add `firmware/`, `software/`, `tools/` without explicit Multi-Component type confirmation
 - Do not add Dockerfile / docker-compose without request
 - Do not add CI/CD configs without request
 - Do not add pre-commit hooks without request
@@ -560,7 +574,7 @@ The `bootstrap.sh` script must:
 1. Start with `#!/usr/bin/env bash` and `set -euo pipefail`
 2. Take the project name as the first argument: `bash bootstrap.sh my_project`
 3. Refuse to overwrite an existing folder
-4. Create directories for the chosen project type (Minimal/Standard/Extended)
+4. Create directories for the chosen project type (Single/Multi-Component)
 5. Create all files via heredoc with correct escaping
 6. **Fill the first entry in `docs/decisions.md`** with:
    - Today's date
@@ -619,7 +633,7 @@ Add **only on demand** and only after discussion:
 | Multiple modules with different rules | Nested `CLAUDE.md` |
 | Team > 2 people | `docs/standards/git-workflow.md` |
 | Specific protocols/interfaces | `docs/protocols/` |
-| Standard → Extended transition | `firmware/` / `software/` / `tools/` |
+| Single → Multi-Component transition | `firmware/` / `software/` / `tools/` |
 | Airgapped environment | Snapshot in `docs/meta/bootstrap-snapshot.md` |
 
 ---
