@@ -1,0 +1,624 @@
+# Бутстрап проекта для Claude Code
+
+**Версия:** 1.3
+**Обновлено:** 2026-04-19
+**Статус:** перевод с английского (каноническая версия — [project-bootstrap.md](./project-bootstrap.md))
+**При расхождениях** английская версия имеет приоритет.
+**Назначение:** спецификация для развёртки нового проекта с поддержкой Claude Code.
+
+## Как использовать
+
+1. Обсуди с ИИ идею проекта, выбери стек, сделай первоначальный анализ
+2. В конце обсуждения прикрепи этот файл и попроси:
+   > "Сгенерируй bash-скрипт развёртки проекта по этому шаблону с учётом нашего обсуждения"
+3. Запусти полученный `bootstrap.sh`
+4. `cd <project> && claude` — работай
+
+## Как хранить и версионировать шаблон
+
+- **Храни шаблон отдельно от проектов** — в личном репозитории (например, `<you>/claude-templates` или `<you>/dotfiles`)
+- **Версионируй через git-теги** — `v1.0`, `v1.1`, чтобы можно было ссылаться на конкретную версию
+- **НЕ копируй этот файл в `docs/` проекта** — вместо этого фиксируй применение в `docs/decisions.md` со ссылкой на версию
+- **Эволюционируй** — дописывай что работает на практике, удаляй что не работает
+
+---
+
+## 🎯 Принципы
+
+1. **CLAUDE.md — точка входа для ИИ**, краткая (максимум 1 экран)
+2. **docs/ — source of truth**, туда выносим детали
+3. **.claude/ — правила и команды**, никакого дублирования docs/
+4. **.claudeignore — экономия токенов**, аналог .gitignore для ИИ
+5. **Минимализм** — добавляем только то, что обсуждали
+6. **Живые стандарты → `docs/standards/`**, метаинформация → `docs/meta/`
+7. **Правило языка** — обсуждение на русском, всё остальное на английском
+
+> Bootstrap задаёт старт проекта, но не должен определять его развитие.
+> Начинай с минимума. Расширяй по необходимости.
+
+---
+
+## 🌐 Правило языка
+
+Единое правило для всех проектов, развёрнутых по этому шаблону:
+
+```
+Discussion (чат с ИИ, обсуждения, заметки): Russian
+Code, docs, comments, commits, interfaces, API, JSON: English
+```
+
+**Что это означает на практике:**
+
+| Артефакт | Язык |
+|---|---|
+| Диалог с ИИ в Claude Code | Русский |
+| Личные заметки, TODO в чате | Русский |
+| Исходный код | English |
+| Комментарии в коде | English |
+| Имена переменных, функций, файлов | English |
+| `README.md`, `CLAUDE.md`, `docs/*` | English |
+| Commit messages (Conventional Commits) | English |
+| API endpoints, JSON keys | English |
+| Сообщения об ошибках в UI (если для пользователя) | по требованию продукта |
+
+**Зачем:**
+- Скорость мышления — думаем и обсуждаем на родном языке
+- Индустриальный стандарт — код и документация на английском портируемы
+- Никаких проблем с кодировками в логах, коммитах, именах файлов
+- Проект можно открыть коллеге из любой страны без переделки
+
+**Исключение:** пользовательские тексты (UI copy, маркетинговые материалы) — на языке целевой аудитории, отдельно от технической документации.
+
+---
+
+## 📋 Типы проектов
+
+При старте определяем тип — от него зависит стартовая структура.
+
+### 🟢 Minimal
+Одна технология, один рантайм, простая задача.
+Примеры: CLI-утилита, небольшой скрипт, одностраничный сайт, простая библиотека.
+
+**Структура:** базовая (см. ниже).
+
+### 🟡 Standard
+Веб-сервис, API, ML-проект, десктопное приложение — один основной стек, но с понятной архитектурой.
+Примеры: FastAPI-сервис, React-приложение, CLI с плагинами, ETL-пайплайн.
+
+**Структура:** базовая + `docs/architecture.md` при необходимости.
+
+### 🔴 Extended
+Несколько компонентов, разные рантаймы, протоколы взаимодействия.
+Примеры: firmware + software + веб-интерфейс, микросервисы, embedded-проекты.
+
+**Структура:** базовая + `docs/protocols/` + `reference/` + разделение на компоненты верхнего уровня (`firmware/`, `software/`, etc.).
+
+---
+
+## 🚫 Когда полный bootstrap НЕ нужен
+
+Этот шаблон сделан для **проектов** — того, что ты строишь, деплоишь, выпускаешь. Не всё, у чего есть git-история, является проектом в этом смысле. Применение полного bootstrap к не-проектам создаёт пустые папки, бессмысленные файлы и концептуальную путаницу.
+
+### Не проекты — не применяй полностью
+
+- **Репозитории спецификаций и шаблонов** — как этот. Они хранят спецификации, а не то, что по ним строится. Bootstrap-скрипт бесполезен (репо создаётся один раз). `decisions.md` дублирует `CHANGELOG.md`. `docs/standards/` нечем наполнить.
+- **Личные wiki и заметки** — Obsidian, Zettelkasten, базы знаний. Нужна другая структура.
+- **Dotfiles** — конфиг твоего shell — не проект.
+- **Репозитории с одной только документацией** — если только они не документируют реальный софтовый продукт в его составе.
+- **Одноразовые скрипты** — один `.py` файл для разовой задачи не нуждается в `.claude/commands/` и `docs/decisions.md`.
+
+### Избирательное применение
+
+Для мета-инструментов и не-проектных репо можно взять **части** шаблона — те, которые реально полезны:
+- **`CLAUDE.md`** — почти всегда полезен; даёт ИИ контекст работы с репо
+- **`.claude/commands/`** — полезно если есть повторяющиеся воркфлоу в чате (формат коммитов, review-конвенции)
+- **Правило языка** — полезно везде
+
+И пропустить то, что не подходит. Это **не плохой кейс** — это правильное применение принципа "минимализм, расширение по необходимости".
+
+### Реальный пример
+
+Репозиторий `claude-templates` (где лежит этот файл) применяет шаблон **избирательно**: у него есть `CLAUDE.md` и `.claude/commands/commit.md`, но намеренно нет `.claudeignore`, `docs/decisions.md`, `docs/standards/` и `bootstrap.sh`. Вместо этого роль decisions-лога играет `CHANGELOG.md`. Смотри этот репо как референс того, как выглядит избирательное применение.
+
+---
+
+## 📁 Базовая структура (Minimal / Standard)
+
+```
+<project>/
+├── README.md
+├── CLAUDE.md
+├── .claudeignore
+├── .gitignore
+├── docs/
+│   ├── decisions.md
+│   └── standards/          ← живые стандарты, наполняется органично
+├── .claude/
+│   ├── settings.json
+│   └── commands/
+│       ├── review.md
+│       └── commit.md
+└── <src директория под стек>
+```
+
+## 📁 Extended-структура (только при явной необходимости)
+
+```
+<project>/
+├── README.md
+├── CLAUDE.md
+├── .claudeignore
+├── .gitignore
+├── docs/
+│   ├── decisions.md
+│   ├── standards/
+│   └── protocols/          ← если есть взаимодействие компонентов
+├── reference/              ← если есть внешние материалы (datasheets, вендорские доки)
+├── .claude/
+│   ├── settings.json
+│   └── commands/
+│       ├── review.md
+│       └── commit.md
+├── firmware/               ← если embedded
+├── software/               ← если есть отдельный software-слой
+└── tools/                  ← утилиты, конвертеры, автоматизация
+```
+
+**Примечание:** `docs/standards/` создаётся пустой. Наполняется по мере появления реальных правил. В Extended-структуре тоже не создаём заглушек — только реально нужные папки.
+
+---
+
+## ✅ Перед генерацией ИИ должен подтвердить
+
+- Название проекта (имя папки)
+- **Тип проекта:** Minimal / Standard / Extended
+- Краткое описание (1-2 предложения)
+- Основной язык и версия
+- Ключевые библиотеки/фреймворк
+- Команды: запуск / тесты / линт
+- Версия шаблона bootstrap (для записи в decisions.md)
+- Для Extended: какие компоненты есть (firmware/software/tools), нужны ли protocols/reference
+- Есть ли специфика, которой нет в шаблоне
+
+Если что-то не обсуждали — спросить, а не выдумывать.
+
+---
+
+## ❌ Чего НЕ делать при генерации
+
+- Не копировать этот файл внутрь проекта
+- Не создавать пустых папок "на вырост" (кроме `docs/standards/` как места для будущих стандартов)
+- Не создавать заглушек `TECH_SPEC.md`, `ARCHITECTURE.md` если их нет в обсуждении
+- Не добавлять `firmware/`, `software/`, `tools/` без явного подтверждения типа Extended
+- Не добавлять Dockerfile / docker-compose без запроса
+- Не добавлять CI/CD конфиги без запроса
+- Не добавлять pre-commit хуки без запроса
+- Не ставить зависимости, которые не обсуждали
+- Не придумывать конвенции, которых не было в разговоре
+- Не добавлять лишние команды в `.claude/commands/`
+- Не создавать файлов-заглушек в `docs/standards/`
+- Не переводить код или технические комментарии на русский язык
+
+---
+
+## 📄 Шаблоны файлов
+
+### CLAUDE.md
+
+```markdown
+# <Project Name>
+
+<1-2 sentence description>
+
+## Language rule
+- Discussion with AI: Russian
+- Code, docs, comments, commits, interfaces: English
+
+## Stack
+- <language/version>
+- <key libraries>
+
+## Commands
+- Run: `<command>`
+- Tests: `<command>`
+- Lint: `<command>`
+
+## Structure
+- `<dir>/` — <purpose>
+- `docs/decisions.md` — architecture decisions
+- `docs/standards/` — living development standards (if any)
+
+## Conventions
+- <main code rules from discussion>
+
+## Important
+- Before large changes — read `docs/decisions.md`
+- <what not to touch, if discussed>
+```
+
+**Примечание:** CLAUDE.md пишется на английском, но секция про language rule зафиксирована как явное правило для ИИ.
+
+---
+
+### README.md
+
+```markdown
+# <Project Name>
+
+<Description for humans>
+
+## Installation
+
+<installation steps for the stack>
+
+## Usage
+
+<minimal example>
+
+## Development
+
+- `CLAUDE.md` — AI assistant context
+- `docs/decisions.md` — architecture decisions
+- `docs/standards/` — development standards
+
+## Language policy
+
+Discussion in chat/issues: Russian.
+Code, documentation, commits, interfaces: English.
+```
+
+---
+
+### .claudeignore — Python
+
+```
+# Environments
+venv/
+.venv/
+env/
+
+# Caches
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Secrets
+.env
+.env.*
+secrets/
+
+# Data and logs
+data/
+logs/
+*.log
+*.csv
+*.sqlite
+
+# IDE
+.vscode/
+.idea/
+
+# Lock files
+poetry.lock
+uv.lock
+
+# Meta info (snapshots, not used in work)
+docs/meta/
+```
+
+---
+
+### .claudeignore — Node.js / TypeScript
+
+```
+# Dependencies
+node_modules/
+
+# Build
+dist/
+build/
+.next/
+.nuxt/
+out/
+
+# Caches
+.turbo/
+.cache/
+coverage/
+
+# Secrets
+.env
+.env.*
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Lock files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Meta info
+docs/meta/
+```
+
+---
+
+### .claudeignore — Go
+
+```
+# Binaries
+bin/
+*.exe
+*.test
+*.out
+
+# Vendor
+vendor/
+
+# Caches
+.cache/
+coverage.out
+
+# Secrets
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+
+# Meta info
+docs/meta/
+```
+
+---
+
+### .claude/settings.json
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Bash(<test command>:*)",
+      "Bash(<lint command>:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(git push:*)",
+      "Bash(git reset --hard:*)"
+    ]
+  }
+}
+```
+
+Адаптировать команды в `allow` под стек проекта.
+
+---
+
+### .claude/commands/review.md
+
+Пишется на русском, потому что это инструкция для диалога с ИИ, а не код или документация. Соответствует правилу языка: обсуждение — на русском.
+
+```markdown
+Проведи code review текущих изменений.
+
+Шаги:
+1. Запусти `git diff` и изучи изменения
+2. Проверь соответствие конвенциям из CLAUDE.md
+3. Если есть `docs/standards/` — свери с применимыми стандартами
+4. Проверь правило языка: код, комментарии, docstrings — на английском
+5. Запусти линт и тесты
+6. Убедись, что нет утечек секретов
+7. Дай резюме на русском: что хорошо, что исправить (указывай файл:строка)
+
+Будь конкретным. Не переписывай код без запроса — только предлагай.
+```
+
+---
+
+### .claude/commands/commit.md
+
+```markdown
+Создай коммит по текущим изменениям.
+
+1. Запусти `git status` и `git diff --staged`
+2. Сгенерируй сообщение на английском в стиле Conventional Commits:
+   - `feat:` новая функциональность
+   - `fix:` исправление бага
+   - `refactor:` рефакторинг без изменения поведения
+   - `test:` тесты
+   - `docs:` документация
+   - `chore:` рутина (зависимости, конфиги)
+3. Покажи сообщение ПЕРЕД коммитом
+4. После моего подтверждения — `git commit`
+```
+
+---
+
+### docs/decisions.md
+
+```markdown
+# Architecture Decisions
+
+Chronological log of important project decisions.
+Each non-trivial decision = one entry.
+
+---
+
+## <YYYY-MM-DD>: Project bootstrap
+
+**Context:** new project start
+**Decision:** bootstrapped using project-bootstrap v<VERSION>
+**Source:** <link to the template version tag in your repository>
+**Consequences:**
+- Structure: `.claude/`, `docs/decisions.md`, minimal CLAUDE.md
+- Conventions fixed in CLAUDE.md
+- Language rule: Discussion — Russian, Code/docs — English
+- Living standards go to `docs/standards/` as they emerge
+
+---
+
+## <YYYY-MM-DD>: <next decision name>
+
+**Context:** <why the question came up>
+**Decision:** <what was chosen>
+**Alternatives:** <what was considered and rejected>
+**Consequences:** <what this means for code and development>
+```
+
+**Важно:** первая запись про bootstrap обязательна — она фиксирует применение шаблона и правило языка без необходимости копировать шаблон внутрь проекта.
+
+---
+
+### docs/standards/ — живые стандарты
+
+Папка для **применяемых в работе** стандартов разработки.
+
+**Что кладём:**
+- `code-style.md` — правила написания кода
+- `git-workflow.md` — работа с git (бранчи, коммиты, PR)
+- `api-conventions.md` — как проектируем API
+- `testing.md` — стратегия тестирования
+- Другое по мере появления реальных правил
+
+**Что НЕ кладём:**
+- Bootstrap-шаблоны и снапшоты (это `docs/meta/` при необходимости)
+- Внешнюю документацию (datasheets, вендорские доки — это `reference/`)
+- Архитектурные решения (это `docs/decisions.md`)
+
+**Принцип наполнения:**
+Не создавай файлы пустыми. Создавай когда:
+1. Правило уже применяется де-факто и нужно его зафиксировать
+2. Решили стандартизировать что-то новое — пишем сразу в момент решения
+3. Команда > 1 человека и нужно синхронизироваться
+
+---
+
+### docs/meta/ — метаинформация (опционально)
+
+Создаётся **только при необходимости**. Сюда идут артефакты **про сам проект**, а не про работу с ним:
+
+- Снапшот bootstrap-шаблона, если работаешь в airgapped-среде без доступа к внешним репозиториям
+- Одноразовые миграционные заметки
+- История крупных реструктуризаций
+
+**Обязательно:**
+- Добавить `docs/meta/` в `.claudeignore` (чтобы Claude не тратил токены)
+- В начале каждого файла — предупреждение что это метаинформация, не используется в работе
+
+---
+
+### .gitignore
+
+Использовать стандартный шаблон для выбранного стека (GitHub gitignore templates).
+Обязательно включить всё, что есть в `.claudeignore` + специфичное для git.
+
+**Не добавляй** `docs/meta/` в `.gitignore` — эта информация должна храниться в репозитории (но игнорироваться Claude).
+
+---
+
+## 🔧 Требования к bash-скрипту
+
+Скрипт `bootstrap.sh` должен:
+
+1. Начинаться с `#!/usr/bin/env bash` и `set -euo pipefail`
+2. Принимать имя проекта первым аргументом: `bash bootstrap.sh my_project`
+3. Проверять, что папка не существует (не перезаписывать)
+4. Создавать структуру директорий согласно выбранному типу проекта (Minimal/Standard/Extended)
+5. Создавать все файлы через heredoc с корректным экранированием
+6. **Заполнить первую запись в `docs/decisions.md`** про bootstrap:
+   - Сегодняшняя дата
+   - Версия шаблона (из заголовка этого файла)
+   - Ссылка на версию в репозитории шаблона (если известна)
+   - Явное упоминание language rule
+7. Инициализировать git: `git init` + `git add .` + первый коммит `chore: bootstrap project`
+8. В конце вывести:
+   - Путь к созданному проекту
+   - Следующие шаги (что установить, что запустить)
+   - Команду для старта: `cd <project> && claude`
+
+### Пример начала скрипта
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+PROJECT_NAME="${1:-}"
+if [[ -z "$PROJECT_NAME" ]]; then
+  echo "Usage: bash bootstrap.sh <project_name>"
+  exit 1
+fi
+
+if [[ -e "$PROJECT_NAME" ]]; then
+  echo "Error: '$PROJECT_NAME' already exists"
+  exit 1
+fi
+
+BOOTSTRAP_VERSION="1.2"
+BOOTSTRAP_DATE="$(date +%Y-%m-%d)"
+
+mkdir -p "$PROJECT_NAME"/{docs/standards,.claude/commands}
+cd "$PROJECT_NAME"
+
+# ... далее создание файлов через heredoc
+```
+
+### Важно про heredoc
+
+- Использовать `<<'EOF'` (с одинарными кавычками) для файлов, содержащих `$`, `` ` ``, `\` — чтобы bash не интерпретировал эти символы
+- Использовать `<<EOF` (без кавычек) только когда нужна подстановка переменных (например, для `decisions.md` с датой и версией)
+
+---
+
+## 📈 Когда расширять шаблон
+
+Добавлять **только по необходимости** и только после обсуждения:
+
+| Ситуация | Что добавить |
+|---|---|
+| Повторяющиеся сложные задачи | `.claude/commands/feature.md` |
+| Устоялось правило кода | Файл в `docs/standards/` |
+| Много внешней документации | Папка `reference/` |
+| Сложная архитектура | `docs/architecture.md` |
+| Несколько модулей с разными правилами | Вложенные `CLAUDE.md` |
+| Команда > 2 человек | `docs/standards/git-workflow.md` |
+| Специфичные протоколы/интерфейсы | `docs/protocols/` |
+| Переход Standard → Extended | `firmware/` / `software/` / `tools/` |
+| Airgapped-среда без доступа к шаблону | Снапшот в `docs/meta/bootstrap-snapshot.md` |
+
+---
+
+## 🧠 Философия
+
+> Claude — не чатбот, а исполнительный движок внутри структурированной системы.
+> Задача шаблона — задать эту систему минимальным набором файлов.
+
+**Правила хранения и эволюции:**
+- Один source of truth для каждого артефакта
+- Шаблон живёт снаружи, следы применения — внутри (`docs/decisions.md`)
+- Стандарты рождаются из практики, а не из фантазии
+- Думаем по-русски, код пишем по-английски
+- Меньше — лучше
+
+Добавляй по мере роста реальных потребностей.
+
+---
+
+## 📋 Changelog
+
+См. [CHANGELOG.md](./CHANGELOG.md) в корне репозитория.
