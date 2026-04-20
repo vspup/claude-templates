@@ -7,6 +7,24 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.7] — 2026-04-20
+
+### Added
+- `python-profile.md` — Layer 1 stack profile for Python projects
+  - Layered architecture model (Layer 0–3)
+  - Minimal Python project structure anchored to `src/` layout
+  - Responsibility layers table (core/cli/io/diagnostics/config/utils) with "when to add" criteria
+  - Diagnostics vs Tests distinction
+  - Hardware-oriented `core/api + protocol` / `io/transport` split
+  - Python Assumptions block extension
+  - Python-specific anti-patterns (non-duplicating Layer 0)
+- README updated: python-profile.md listed in Contents with Layer 0/1 labels
+
+### Why
+Language profiles extend the core bootstrap without duplicating it. Python is the first profile — establishes the pattern for future stack profiles (Go, TypeScript, etc.). The layered model (0→1→2→3) makes it explicit what each file is responsible for and prevents profile files from becoming second copies of the core spec.
+
+---
+
 ## [1.6] — 2026-04-19
 
 ### Added

@@ -9,8 +9,9 @@
 
 ## Содержимое
 
-- [`project-bootstrap.md`](./project-bootstrap.md) — спецификация для развёртки нового проекта с поддержкой Claude Code (каноническая версия, EN)
+- [`project-bootstrap.md`](./project-bootstrap.md) — спецификация для развёртки нового проекта с поддержкой Claude Code (каноническая версия, EN, Layer 0)
   - [`project-bootstrap.ru.md`](./project-bootstrap.ru.md) — русский перевод
+- [`python-profile.md`](./python-profile.md) — Python-профиль: структура, слои ответственности, упаковка (Layer 1)
 
 ---
 
