@@ -1,6 +1,6 @@
 # Project Bootstrap for Claude Code
 
-**Version:** 1.6
+**Version:** 1.8
 **Updated:** 2026-04-19
 **Canonical:** this file
 **Translations:** [Русский](./project-bootstrap.ru.md)
@@ -178,6 +178,20 @@ The `claude-templates` repository itself (where this file lives) applies the tem
 
 ---
 
+## 🧩 Stack profiles (Layer 1)
+
+This file is **Layer 0** — language-agnostic foundation.
+
+For language-specific conventions, attach the corresponding **Layer 1 profile** alongside this file when starting the bootstrap discussion.
+
+| Language | Profile |
+|---|---|
+| Python | [`python-profile.md`](./python-profile.md) |
+
+If no profile exists for the chosen language — bootstrap from Layer 0 only.
+
+---
+
 ## ✅ Before generation, the AI must confirm
 
 - Project name (folder name)
@@ -187,6 +201,7 @@ The `claude-templates` repository itself (where this file lives) applies the tem
 - Key libraries / framework
 - Commands: run / tests / lint
 - Bootstrap template version (for the `decisions.md` entry)
+- **Stack profile (Layer 1):** which profile is attached, or "none"
 - For Multi-Component: which components (firmware/software/tools), whether protocols/reference are needed
 - Any specifics not covered by the template
 
@@ -205,6 +220,7 @@ Assumptions:
 - Project name: <name>
 - Type: Single / Multi-Component
 - Language: <language> <version>
+- Stack profile (Layer 1): <profile name or "none">
 - Framework / key libraries: <list or "none">
 - Run: <command or "see README.md">
 - Tests: <command or "not configured yet">

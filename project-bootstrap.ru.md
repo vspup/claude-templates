@@ -1,6 +1,6 @@
 # Бутстрап проекта для Claude Code
 
-**Версия:** 1.6
+**Версия:** 1.8
 **Обновлено:** 2026-04-19
 **Статус:** перевод с английского (каноническая версия — [project-bootstrap.md](./project-bootstrap.md))
 **При расхождениях** английская версия имеет приоритет.
@@ -178,6 +178,20 @@ Code, docs, comments, commits, interfaces, API, JSON: English
 
 ---
 
+## 🧩 Стек-профили (Layer 1)
+
+Этот файл — **Layer 0**, языко-независимая основа.
+
+Для языко-специфичных конвенций прикрепи соответствующий **Layer 1 профиль** рядом с этим файлом в начале bootstrap-обсуждения.
+
+| Язык | Профиль |
+|---|---|
+| Python | [`python-profile.md`](./python-profile.md) |
+
+Если профиля для выбранного языка нет — bootstrap только из Layer 0.
+
+---
+
 ## ✅ Перед генерацией ИИ должен подтвердить
 
 - Название проекта (имя папки)
@@ -187,6 +201,7 @@ Code, docs, comments, commits, interfaces, API, JSON: English
 - Ключевые библиотеки/фреймворк
 - Команды: запуск / тесты / линт
 - Версия шаблона bootstrap (для записи в decisions.md)
+- **Стек-профиль (Layer 1):** какой профиль прикреплён, или "none"
 - Для Multi-Component: какие компоненты есть (firmware/software/tools), нужны ли protocols/reference
 - Есть ли специфика, которой нет в шаблоне
 
@@ -205,6 +220,7 @@ Assumptions:
 - Project name: <имя>
 - Type: Single / Multi-Component
 - Language: <язык> <версия>
+- Stack profile (Layer 1): <название профиля или "none">
 - Framework / key libraries: <список или "none">
 - Run: <команда или "see README.md">
 - Tests: <команда или "not configured yet">

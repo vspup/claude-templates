@@ -7,6 +7,18 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.8] — 2026-04-20
+
+### Added
+- `## 🧩 Stack profiles (Layer 1)` section in `project-bootstrap.md` — Layer 0 now explicitly references available Layer 1 profiles with a table
+- `Stack profile (Layer 1)` field in the "Before generation" checklist
+- `Stack profile (Layer 1)` field in the Assumptions block format
+
+### Why
+Layer 1 profiles existed but Layer 0 had no knowledge of them — the link was one-directional. Now the AI reading Layer 0 knows to check whether a stack profile applies and to surface it in the Assumptions block before generating anything.
+
+---
+
 ## [1.7] — 2026-04-20
 
 ### Added
