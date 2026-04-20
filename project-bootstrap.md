@@ -5,6 +5,7 @@
 **Canonical:** this file
 **Translations:** [Русский](./project-bootstrap.ru.md)
 **Purpose:** Specification for bootstrapping a new project with Claude Code support.
+**GitHub:** https://github.com/vspup/claude-templates/blob/v1.6/project-bootstrap.md
 
 ## 🎯 Principles
 

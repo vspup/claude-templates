@@ -5,7 +5,7 @@
 **Статус:** перевод с английского (каноническая версия — [project-bootstrap.md](./project-bootstrap.md))
 **При расхождениях** английская версия имеет приоритет.
 **Назначение:** спецификация для развёртки нового проекта с поддержкой Claude Code.
-**GitHub:** https://github.com/vspup/claude-templates/blob/v1.5/project-bootstrap.md
+**GitHub:** https://github.com/vspup/claude-templates/blob/v1.6/project-bootstrap.md
 
 ## 🎯 Принципы
 
