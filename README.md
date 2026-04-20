@@ -12,6 +12,7 @@ Personal collection of templates and workflows for working with [Claude Code](ht
 - [`project-bootstrap.md`](./project-bootstrap.md) — specification for bootstrapping a new project with Claude Code support (Layer 0)
   - [`project-bootstrap.ru.md`](./project-bootstrap.ru.md) — Russian translation
 - [`python-profile.md`](./python-profile.md) — Python stack profile: structure, responsibility layers, packaging (Layer 1)
+- [`arduino-profile.md`](./arduino-profile.md) — Arduino stack profile: thin sketch principle, src/ layout, toolchain, hardware extension (Layer 1)
 
 ---
 

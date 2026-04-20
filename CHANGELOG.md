@@ -7,6 +7,25 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.9] — 2026-04-20
+
+### Added
+- `arduino-profile.md` — Layer 1 stack profile for Arduino projects
+  - Critical naming rule: `.ino` must match folder name
+  - Toolchain decision table: Arduino IDE vs PlatformIO
+  - Thin sketch principle with code example
+  - Responsibility layers table (app/protocol/transport/board/sensors)
+  - `docs/` vs `reference/` distinction by origin (created vs received)
+  - Hardware-oriented extension for measurement/device projects
+  - Arduino Assumptions block extension (board, toolchain, transport, protocol)
+  - Arduino-specific anti-patterns
+- Arduino added to Stack profiles table in `project-bootstrap.md`
+
+### Why
+Arduino projects have a specific failure mode: business logic ends up in `.ino` because it's the most visible file. The thin sketch principle directly addresses this. The hardware-oriented extension (`app/protocol/transport/board/sensors`) maps to real embedded measurement projects with UART/CAN/I2C stacks.
+
+---
+
 ## [1.8] — 2026-04-20
 
 ### Added

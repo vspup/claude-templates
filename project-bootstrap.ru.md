@@ -1,6 +1,6 @@
 # Бутстрап проекта для Claude Code
 
-**Версия:** 1.8
+**Версия:** 1.9
 **Обновлено:** 2026-04-19
 **Статус:** перевод с английского (каноническая версия — [project-bootstrap.md](./project-bootstrap.md))
 **При расхождениях** английская версия имеет приоритет.
@@ -187,6 +187,7 @@ Code, docs, comments, commits, interfaces, API, JSON: English
 | Язык | Профиль |
 |---|---|
 | Python | [`python-profile.md`](./python-profile.md) |
+| Arduino (C++) | [`arduino-profile.md`](./arduino-profile.md) |
 
 Если профиля для выбранного языка нет — bootstrap только из Layer 0.
 

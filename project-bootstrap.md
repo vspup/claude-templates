@@ -1,6 +1,6 @@
 # Project Bootstrap for Claude Code
 
-**Version:** 1.8
+**Version:** 1.9
 **Updated:** 2026-04-19
 **Canonical:** this file
 **Translations:** [Русский](./project-bootstrap.ru.md)
@@ -187,6 +187,7 @@ For language-specific conventions, attach the corresponding **Layer 1 profile** 
 | Language | Profile |
 |---|---|
 | Python | [`python-profile.md`](./python-profile.md) |
+| Arduino (C++) | [`arduino-profile.md`](./arduino-profile.md) |
 
 If no profile exists for the chosen language — bootstrap from Layer 0 only.
 
